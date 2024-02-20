@@ -1,0 +1,39 @@
+body {
+  background-color: lightseagreen;
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  font-family: "Protest Riot", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  color: gold;
+  text-align: center;
+  font-size: 42px;
+  text-decoration: underline;
+}
+
+.container {
+  display: flex;
+  justify-content: space-around;
+}
+
+.friendlyWater,
+.enemyWater {
+  display: grid;
+  height: 500px;
+  width: 500px;
+  grid-template-columns: repeat(10, 1fr);
+  grid-template-rows: repeat(10, 1fr);
+  border: 2px blue;
+  gap: 2px;
+  padding: 2px;
+  background-color: black;
+}
+
+.cell {
+  background: black;
+  border: 1px solid green;
+  cursor: pointer;
+}
