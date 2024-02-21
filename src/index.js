@@ -167,12 +167,11 @@ class screenController {
         const cellButton = document.createElement("button");
         cellButton.classList.add("cell");
 
-        if (this.friendlyWater.board[(indexRow, indexCol)] == 1) {
+        if (this.friendlyWater.board[indexRow][indexCol] == 1) {
           cellButton.style.backgroundColor = "blue";
-        } else if (this.friendlyWater.board[(indexRow, indexCol)] == 2) {
+        } else if (this.friendlyWater.board[indexRow][indexCol] == 2) {
           cellButton.style.backgroundColor = "red";
-        } else if (this.friendlyWater.board[(indexRow, indexCol)] == "c") {
-          console.log(5);
+        } else if (this.friendlyWater.board[indexRow][indexCol] == "c") {
           cellButton.style.backgroundColor = "gray";
         }
 
@@ -187,10 +186,12 @@ class screenController {
         const cellButton = document.createElement("button");
         cellButton.classList.add("cell");
 
-        if (this.enemyWater.board[(indexRow, indexCol)] == 1) {
+        if (this.enemyWater.board[indexRow][indexCol] == 1) {
           cellButton.style.backgroundColor = "blue";
-        } else if (this.enemyWater.board[(indexRow, indexCol)] == 2) {
+        } else if (this.enemyWater.board[indexRow][indexCol] == 2) {
           cellButton.style.backgroundColor = "red";
+        } else if (this.enemyWater.board[indexRow][indexCol] == "s") {
+          cellButton.style.backgroundColor = "gray";
         }
 
         cellButton.dataset.column = indexCol;
@@ -201,27 +202,27 @@ class screenController {
   }
 
   clickHandlerBoard(e) {
-    const selectedRow = e.target.dataset.row;
-    const selectedCol = e.target.dataset.column;
+    const selectedRow = parseInt(e.target.dataset.row);
+    const selectedCol = parseInt(e.target.dataset.column);
     console.log(selectedRow);
     console.log(selectedCol);
 
-    if (!selectedCol || !selectedRow) return;
+    if (selectedCol == undefined || !selectedRow == undefined) return;
 
     if (this.stage == "position") {
-      console.log(
-        this.human.position(this.counter, 0, "c", selectedRow, selectedCol)
-      );
-      this.bot.position(this.counter, 0, "c");
+      if (!this.human.position(this.counter, 1, "c", selectedRow, selectedCol))
+        return;
+
+      this.bot.position(this.counter, 0, "s");
       this.counter--;
       if (this.counter === 0) {
         this.stage = "play";
       }
     } else {
-      console.log(this.friendlyWater.board);
-      console.log(this.enemyWater.board);
-      console.log(this.friendlyWater.ships);
-      this.human.attack(selectedRow, selectedCol);
+      console.log(this.friendlyWater.validPosition);
+      console.log(this.enemyWater.validPosition);
+      if (selectedCol == undefined || !selectedRow == undefined) return;
+      if (!this.human.attack(selectedRow, selectedCol)) return;
       this.bot.attack();
     }
 

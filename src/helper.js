@@ -13,7 +13,7 @@ function validPlace(x, y, length, axis, valid) {
     for (let i = y - 1; i < y + length + 1; i++) {
       for (let j = x - 1; j < x + 2; j++) {
         if (!(i < 0 || j < 0 || i > 9 || j > 9)) {
-          if (valid[j][i] != 0 && j == x && i >= y && i < y + length - 1) {
+          if (valid[j][i] != 0 && j == x && i >= y && i < y + length) {
             return false;
           }
         }
@@ -31,7 +31,7 @@ function validPlace(x, y, length, axis, valid) {
     for (let i = x - 1; i < x + length + 1; i++) {
       for (let j = y - 1; j < y + 2; j++) {
         if (!(i < 0 || j < 0 || i > 9 || j > 9)) {
-          if (valid[i][j] != 0 && j == y && i >= x && i < x + length - 1) {
+          if (valid[i][j] != 0 && j == y && i >= x && i < x + length) {
             return false;
           }
         }
