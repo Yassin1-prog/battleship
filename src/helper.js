@@ -1,7 +1,7 @@
 function validMove(arr) {
   for (let i = 0; i < 10; i++) {
     for (let j = 0; j < 10; j++) {
-      if (arr[i][j] == 0) {
+      if (arr[i][j] == 0 || typeof arr[i][j] == "string") {
         return [i, j];
       }
     }

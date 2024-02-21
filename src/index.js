@@ -88,7 +88,7 @@ class Gameboard {
   }
 
   isLost() {
-    const destroyedShips = this.ships.filter((ship) => ship.isSunk() == true);
+    const destroyedShips = this.ships.filter((ship) => ship.sunk == true);
     if (destroyedShips.length === this.ships.length) {
       return true;
     } else {
@@ -147,13 +147,27 @@ class screenController {
     this.bot = new Player(this.enemyWater, this.friendlyWater, "ai");
 
     this.stage = "position";
-    this.counter = 5;
+    this.counter = 0;
+    this.boats = [
+      "CARRIER",
+      "BATTLESHIP",
+      "DESTROYER",
+      "SUBMARINE",
+      "PATROL BOAT",
+    ];
+    this.size = [5, 4, 3, 3, 2];
 
     this.fleet1 = document.querySelector(".friendlyWater");
     this.fleet2 = document.querySelector(".enemyWater");
 
-    this.fleet1.addEventListener("click", this.clickHandlerBoard.bind(this));
-    this.fleet2.addEventListener("click", this.clickHandlerBoard.bind(this));
+    this.clickHandlerBoardBound = this.clickHandlerBoard.bind(this);
+    this.fleet1.addEventListener("click", this.clickHandlerBoardBound);
+    this.fleet2.addEventListener("click", this.clickHandlerBoardBound);
+
+    const btn = document.querySelector(".btn");
+    btn.addEventListener("click", () => {
+      window.location.reload();
+    });
 
     this.updateScreen();
   }
@@ -161,6 +175,16 @@ class screenController {
   updateScreen() {
     this.fleet1.textContent = "";
     this.fleet2.textContent = "";
+
+    if (this.stage == "play" && this.friendlyWater.isLost()) {
+      this.fleet1.removeEventListener("click", this.clickHandlerBoardBound);
+      this.fleet2.removeEventListener("click", this.clickHandlerBoardBound);
+      console.log("Game over, your fleet got destroyed, LOSER");
+    } else if (this.stage == "play" && this.enemyWater.isLost()) {
+      this.fleet1.removeEventListener("click", this.clickHandlerBoardBound);
+      this.fleet2.removeEventListener("click", this.clickHandlerBoardBound);
+      console.log("Game over, you destroyed the enemy fleet, WINNER");
+    }
 
     this.friendlyWater.board.forEach((row, indexRow) => {
       row.forEach((cell, indexCol) => {
@@ -171,7 +195,9 @@ class screenController {
           cellButton.style.backgroundColor = "blue";
         } else if (this.friendlyWater.board[indexRow][indexCol] == 2) {
           cellButton.style.backgroundColor = "red";
-        } else if (this.friendlyWater.board[indexRow][indexCol] == "c") {
+        } else if (
+          typeof this.friendlyWater.board[indexRow][indexCol] == "string"
+        ) {
           cellButton.style.backgroundColor = "gray";
         }
 
@@ -190,7 +216,9 @@ class screenController {
           cellButton.style.backgroundColor = "blue";
         } else if (this.enemyWater.board[indexRow][indexCol] == 2) {
           cellButton.style.backgroundColor = "red";
-        } else if (this.enemyWater.board[indexRow][indexCol] == "s") {
+        } else if (
+          typeof this.enemyWater.board[indexRow][indexCol] == "string"
+        ) {
           cellButton.style.backgroundColor = "gray";
         }
 
@@ -204,24 +232,28 @@ class screenController {
   clickHandlerBoard(e) {
     const selectedRow = parseInt(e.target.dataset.row);
     const selectedCol = parseInt(e.target.dataset.column);
-    console.log(selectedRow);
-    console.log(selectedCol);
 
-    if (selectedCol == undefined || !selectedRow == undefined) return;
+    if (isNaN(selectedCol) || isNaN(selectedRow)) return;
 
     if (this.stage == "position") {
-      if (!this.human.position(this.counter, 1, "c", selectedRow, selectedCol))
+      if (
+        !this.human.position(
+          this.size[this.counter],
+          1,
+          this.boats[this.counter],
+          selectedRow,
+          selectedCol
+        )
+      )
         return;
 
-      this.bot.position(this.counter, 0, "s");
-      this.counter--;
-      if (this.counter === 0) {
+      this.bot.position(this.size[this.counter], 0, this.boats[this.counter]);
+      this.counter++;
+      if (this.counter === 5) {
         this.stage = "play";
       }
     } else {
-      console.log(this.friendlyWater.validPosition);
-      console.log(this.enemyWater.validPosition);
-      if (selectedCol == undefined || !selectedRow == undefined) return;
+      if (isNaN(selectedCol) || isNaN(selectedRow)) return;
       if (!this.human.attack(selectedRow, selectedCol)) return;
       this.bot.attack();
     }
