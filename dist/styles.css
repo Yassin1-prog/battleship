@@ -43,10 +43,12 @@ h1 {
   justify-content: center;
 }
 
-.btn {
-  font-size: 32px;
+.btn,
+.btnn {
+  font-size: 24px;
   background-color: chocolate;
   border-radius: 25px;
+  margin: 20px;
   margin-top: 50px;
   padding: 15px;
   padding-left: 25px;
@@ -54,5 +56,9 @@ h1 {
 }
 
 .btn:hover {
+  background-color: darkgreen;
+}
+
+.btnn:hover {
   background-color: darkgreen;
 }

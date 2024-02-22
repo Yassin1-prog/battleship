@@ -48,4 +48,13 @@ function validPlace(x, y, length, axis, valid) {
   }
 }
 
-module.exports = { validMove, validPlace };
+function randomPosition(friend, length, axis, name) {
+  let i = Math.floor(Math.random() * 10);
+  let j = Math.floor(Math.random() * 10);
+  while (!friend.placeShip(i, j, length, axis, name)) {
+    i = Math.floor(Math.random() * 10);
+    j = Math.floor(Math.random() * 10);
+  }
+}
+
+module.exports = { validMove, validPlace, randomPosition };

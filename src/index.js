@@ -107,12 +107,7 @@ class Player {
 
   position(length, axis, name, x = 0, y = 0) {
     if (this.type == "ai") {
-      let i = Math.floor(Math.random() * 10);
-      let j = Math.floor(Math.random() * 10);
-      while (!this.friend.placeShip(i, j, length, axis, name)) {
-        i = Math.floor(Math.random() * 10);
-        j = Math.floor(Math.random() * 10);
-      }
+      helper.randomPosition(this.friend, length, axis, name);
     } else {
       return this.friend.placeShip(x, y, length, axis, name);
     }
@@ -165,10 +160,32 @@ class screenController {
     this.fleet2.addEventListener("click", this.clickHandlerBoardBound);
 
     const btn = document.querySelector(".btn");
+    const btnn = document.querySelector(".btnn");
+
     btn.addEventListener("click", () => {
       window.location.reload();
     });
 
+    btnn.addEventListener("click", () => {
+      this.friendlyWater = new Gameboard();
+      this.enemyWater = new Gameboard();
+      this.human = new Player(this.friendlyWater, this.enemyWater);
+      this.bot = new Player(this.enemyWater, this.friendlyWater, "ai");
+
+      for (let i = 0; i < 5; i++) {
+        helper.randomPosition(
+          this.friendlyWater,
+          this.size[i],
+          1,
+          this.boats[i]
+        );
+        this.bot.position(this.size[i], 0, this.boats[i]);
+      }
+      console.log(this.friendlyWater);
+      console.log(this.enemyWater);
+      this.stage = "play";
+      this.updateScreen();
+    });
     this.updateScreen();
   }
 
