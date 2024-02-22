@@ -48,7 +48,8 @@ function validPlace(x, y, length, axis, valid) {
   }
 }
 
-function randomPosition(friend, length, axis, name) {
+function randomPosition(friend, length, name) {
+  let axis = Math.floor(Math.random() * 2);
   let i = Math.floor(Math.random() * 10);
   let j = Math.floor(Math.random() * 10);
   while (!friend.placeShip(i, j, length, axis, name)) {

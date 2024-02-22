@@ -105,9 +105,9 @@ class Player {
     this.friend = friend;
   }
 
-  position(length, axis, name, x = 0, y = 0) {
+  position(length, name, axis = 1, x = 0, y = 0) {
     if (this.type == "ai") {
-      helper.randomPosition(this.friend, length, axis, name);
+      helper.randomPosition(this.friend, length, name);
     } else {
       return this.friend.placeShip(x, y, length, axis, name);
     }
@@ -141,6 +141,7 @@ class screenController {
     this.human = new Player(this.friendlyWater, this.enemyWater);
     this.bot = new Player(this.enemyWater, this.friendlyWater, "ai");
 
+    this.axis = 0;
     this.stage = "position";
     this.counter = 0;
     this.boats = [
@@ -161,6 +162,18 @@ class screenController {
 
     const btn = document.querySelector(".btn");
     const btnn = document.querySelector(".btnn");
+    const rotate = document.querySelector("#rotate");
+    const dimension = document.querySelector(".rotate");
+
+    rotate.addEventListener("click", (e) => {
+      e.preventDefault();
+      this.axis = this.axis === 0 ? 1 : 0;
+      if (this.axis == 0) {
+        dimension.textContent = "Horizontal";
+      } else {
+        dimension.textContent = "Vertical";
+      }
+    });
 
     btn.addEventListener("click", () => {
       window.location.reload();
@@ -173,19 +186,26 @@ class screenController {
       this.bot = new Player(this.enemyWater, this.friendlyWater, "ai");
 
       for (let i = 0; i < 5; i++) {
-        helper.randomPosition(
-          this.friendlyWater,
-          this.size[i],
-          1,
-          this.boats[i]
-        );
-        this.bot.position(this.size[i], 0, this.boats[i]);
+        helper.randomPosition(this.friendlyWater, this.size[i], this.boats[i]);
+        this.bot.position(this.size[i], this.boats[i]);
       }
-      console.log(this.friendlyWater);
-      console.log(this.enemyWater);
       this.stage = "play";
       this.updateScreen();
     });
+
+    const how = document.querySelector(".how");
+    const close = document.querySelector(".close");
+    const modal = document.querySelector(".modal");
+
+    how.addEventListener("click", (e) => {
+      e.preventDefault();
+      modal.showModal();
+    });
+
+    close.addEventListener("click", () => {
+      modal.close();
+    });
+
     this.updateScreen();
   }
 
@@ -193,14 +213,23 @@ class screenController {
     this.fleet1.textContent = "";
     this.fleet2.textContent = "";
 
+    const display = document.querySelector(".display");
+    if (this.stage == "position") {
+      display.textContent = "Position your fleet";
+    } else {
+      display.textContent = "War ongoing...";
+    }
+
+    if (this.stage == "play") {
+      this.fleet1.removeEventListener("click", this.clickHandlerBoardBound);
+    }
+
     if (this.stage == "play" && this.friendlyWater.isLost()) {
-      this.fleet1.removeEventListener("click", this.clickHandlerBoardBound);
       this.fleet2.removeEventListener("click", this.clickHandlerBoardBound);
-      console.log("Game over, your fleet got destroyed, LOSER");
+      display.textContent = "War over, your fleet got destroyed, LOSER";
     } else if (this.stage == "play" && this.enemyWater.isLost()) {
-      this.fleet1.removeEventListener("click", this.clickHandlerBoardBound);
       this.fleet2.removeEventListener("click", this.clickHandlerBoardBound);
-      console.log("Game over, you destroyed the enemy fleet, WINNER");
+      display.textContent = "War over, you destroyed the enemy fleet, WINNER";
     }
 
     this.friendlyWater.board.forEach((row, indexRow) => {
@@ -216,6 +245,8 @@ class screenController {
           typeof this.friendlyWater.board[indexRow][indexCol] == "string"
         ) {
           cellButton.style.backgroundColor = "gray";
+        } else {
+          cellButton.classList.add("cell1");
         }
 
         cellButton.dataset.column = indexCol;
@@ -237,6 +268,8 @@ class screenController {
           typeof this.enemyWater.board[indexRow][indexCol] == "string"
         ) {
           cellButton.style.backgroundColor = "gray";
+        } else {
+          cellButton.classList.add("cell1");
         }
 
         cellButton.dataset.column = indexCol;
@@ -256,15 +289,15 @@ class screenController {
       if (
         !this.human.position(
           this.size[this.counter],
-          1,
           this.boats[this.counter],
+          this.axis,
           selectedRow,
           selectedCol
         )
       )
         return;
 
-      this.bot.position(this.size[this.counter], 0, this.boats[this.counter]);
+      this.bot.position(this.size[this.counter], this.boats[this.counter]);
       this.counter++;
       if (this.counter === 5) {
         this.stage = "play";
