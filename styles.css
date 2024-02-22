@@ -84,6 +84,16 @@ h2 {
   justify-content: space-between;
 }
 
+.esc {
+  display: flex;
+  justify-content: space-between;
+}
+
+.esc > div {
+  font-size: 18px;
+  font-family: "Protest Riot", sans-serif;
+}
+
 #rotate {
   font-size: 24px;
   color: gold;
