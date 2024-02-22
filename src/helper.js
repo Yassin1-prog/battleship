@@ -8,6 +8,46 @@ function validMove(arr) {
   }
 }
 
+function smartMove(arr, visited) {
+  for (let i = 1; i < 9; i++) {
+    for (let j = 1; j < 9; j++) {
+      if (arr[i][j] == 2 && visited[i][j] == 0) {
+        if (typeof arr[i - 1][j] == "string") {
+          return [i - 1, j];
+        } else if (typeof arr[i][j - 1] == "string") {
+          return [i, j - 1];
+        } else if (typeof arr[i][j + 1] == "string") {
+          return [i, j + 1];
+        } else if (typeof arr[i + 1][j] == "string") {
+          return [i + 1, j];
+        } else {
+          visited[i][j] = 1;
+        }
+      }
+    }
+  }
+}
+
+function averageMove(arr, visited) {
+  for (let i = 1; i < 9; i++) {
+    for (let j = 1; j < 9; j++) {
+      if (arr[i][j] == 2 && visited[i][j] == 0) {
+        if (arr[i - 1][j] != 1 && arr[i - 1][j] != 2) {
+          return [i - 1, j];
+        } else if (arr[i][j - 1] != 1 && arr[i][j - 1] != 2) {
+          return [i, j - 1];
+        } else if (arr[i][j + 1] != 1 && arr[i][j + 1] != 2) {
+          return [i, j + 1];
+        } else if (arr[i + 1][j] != 1 && arr[i + 1][j] != 2) {
+          return [i + 1, j];
+        } else {
+          visited[i][j] = 1;
+        }
+      }
+    }
+  }
+}
+
 function validPlace(x, y, length, axis, valid) {
   if (axis == 0) {
     for (let i = y - 1; i < y + length + 1; i++) {
@@ -58,4 +98,10 @@ function randomPosition(friend, length, name) {
   }
 }
 
-module.exports = { validMove, validPlace, randomPosition };
+module.exports = {
+  validMove,
+  validPlace,
+  randomPosition,
+  smartMove,
+  averageMove,
+};

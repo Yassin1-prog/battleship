@@ -29,12 +29,15 @@ class Gameboard {
     this.ships = [];
     this.board = [];
     this.validPosition = [];
+    this.smartAI = [];
     for (let i = 0; i < 10; i++) {
       this.board[i] = [];
       this.validPosition[i] = [];
+      this.smartAI[i] = [];
       for (let j = 0; j < 10; j++) {
         this.board[i].push(0);
         this.validPosition[i].push(0);
+        this.smartAI[i].push(0);
       }
     }
   }
@@ -113,7 +116,7 @@ class Player {
     }
   }
 
-  attack(row = null, column = null) {
+  attack(row = null, column = null, dific = 0) {
     if (this.type == "ai") {
       let cnt = 0;
       while (true) {
@@ -122,10 +125,21 @@ class Player {
           let arr = helper.validMove(this.enemy.board);
           return this.enemy.recieveAttack(arr[0], arr[1]);
         }
-        let x = Math.floor(Math.random() * 10);
-        let y = Math.floor(Math.random() * 10);
-        if (this.enemy.recieveAttack(x, y)) {
-          return true;
+
+        let checkmate;
+        if (dific == 0) {
+          checkmate = helper.averageMove(this.enemy.board, this.enemy.smartAI);
+        } else {
+          checkmate = helper.smartMove(this.enemy.board, this.enemy.smartAI);
+        }
+        if (Array.isArray(checkmate)) {
+          return this.enemy.recieveAttack(checkmate[0], checkmate[1]);
+        } else {
+          let x = Math.floor(Math.random() * 10);
+          let y = Math.floor(Math.random() * 10);
+          if (this.enemy.recieveAttack(x, y)) {
+            return true;
+          }
         }
       }
     } else {
@@ -141,6 +155,7 @@ class screenController {
     this.human = new Player(this.friendlyWater, this.enemyWater);
     this.bot = new Player(this.enemyWater, this.friendlyWater, "ai");
 
+    this.diff = 0;
     this.axis = 0;
     this.stage = "position";
     this.counter = 0;
@@ -305,7 +320,14 @@ class screenController {
     } else {
       if (isNaN(selectedCol) || isNaN(selectedRow)) return;
       if (!this.human.attack(selectedRow, selectedCol)) return;
-      this.bot.attack();
+
+      const cb = document.querySelector("#diff");
+      if (cb.checked) {
+        this.diff = 1;
+      } else {
+        this.diff = 0;
+      }
+      this.bot.attack(0, 0, this.diff);
     }
 
     this.updateScreen();
