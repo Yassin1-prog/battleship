@@ -14,6 +14,86 @@ h1 {
   text-decoration: underline;
 }
 
+.link {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin-left: 20px;
+}
+
+.how {
+  font-size: 24px;
+  color: darkviolet;
+  text-decoration: none;
+}
+
+.how:hover {
+  text-decoration: underline;
+  color: red;
+}
+
+.result {
+  display: flex;
+  justify-content: center;
+}
+
+li {
+  padding: 5px;
+}
+
+.rules,
+.modal {
+  font-family: "Protest Riot", sans-serif;
+}
+
+.gray,
+.red,
+.blue {
+  padding: 5px;
+}
+
+.gray > .fa-square {
+  color: gray;
+}
+
+.blue >,
+.fa-square {
+  color: blue;
+}
+
+.red > .fa-square {
+  color: red;
+}
+
+.display {
+  font-family: "Protest Riot", sans-serif;
+  text-align: center;
+  font-size: 24px;
+  padding: 25px;
+  border-style: dashed;
+  background-color: gray;
+}
+
+h2 {
+  padding: 0;
+  margin: 0;
+}
+
+.desc {
+  display: flex;
+  justify-content: space-between;
+}
+
+#rotate {
+  font-size: 24px;
+  color: gold;
+}
+
+.rotate {
+  font-size: 24px;
+  font-family: "Protest Riot", sans-serif;
+}
+
 .container {
   display: flex;
   justify-content: space-around;
@@ -38,6 +118,10 @@ h1 {
   cursor: pointer;
 }
 
+.cell1:hover {
+  opacity: 0;
+}
+
 .footer {
   display: flex;
   justify-content: center;
@@ -45,11 +129,11 @@ h1 {
 
 .btn,
 .btnn {
-  font-size: 24px;
+  font-size: 18px;
   background-color: chocolate;
   border-radius: 25px;
   margin: 20px;
-  margin-top: 50px;
+  margin-top: 30px;
   padding: 15px;
   padding-left: 25px;
   padding-right: 25px;
