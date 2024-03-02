@@ -99,6 +99,10 @@ h2 {
   color: gold;
 }
 
+#rotate:hover {
+  font-size: 32px;
+}
+
 .rotate {
   font-size: 24px;
   font-family: "Protest Riot", sans-serif;
@@ -147,6 +151,7 @@ h2 {
   padding: 15px;
   padding-left: 25px;
   padding-right: 25px;
+  transition: background-color 1s ease-out;
 }
 
 .btn:hover {
@@ -155,4 +160,11 @@ h2 {
 
 .btnn:hover {
   background-color: darkgreen;
+}
+
+@media (max-width: 1040px) {
+  .container {
+    display: flex;
+    flex-direction: column;
+  }
 }

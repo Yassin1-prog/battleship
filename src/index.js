@@ -279,10 +279,6 @@ class screenController {
           cellButton.style.backgroundColor = "blue";
         } else if (this.enemyWater.board[indexRow][indexCol] == 2) {
           cellButton.style.backgroundColor = "red";
-        } else if (
-          typeof this.enemyWater.board[indexRow][indexCol] == "string"
-        ) {
-          cellButton.style.backgroundColor = "gray";
         } else {
           cellButton.classList.add("cell1");
         }
